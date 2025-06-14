@@ -1,0 +1,41 @@
+name : Postman collection workflow
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:   # this line will tell that this flow will run manaually also. 
+  schedule:
+    - cron : 30 02 * * *    # 8:00 am IST
+    - cron : 00 14 * * *    # if we want to run cron daily we have to put * * *. month date and day. 
+    - cron : 00 06 * * 1-5  # now cron will run monday to friday.
+
+
+jobs:
+  run-postman-test:
+    runs-on : ubuntu - latest
+    
+
+    steps:
+      - name : checkout the code
+        uses: actions/checkout@v4.2.2
+      - name: Install nodeJs and npm
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '22'
+
+      - name: install newman & html-extra globally
+        run: |
+          npm install -g newman 
+          npm install -g newman-reporter-htmlextra
+
+      - name: run the postmann collection with newman
+        run: |
+             newman run 'Inwarranty-flow Collection by jatin.postman_collection.json' \
+             -e QA.postman_environment.json \
+             -d testData.csv \
+             -r cli,htmlextra  # slash shows that remaining code is the next line. if file name having space then keep this in the '' other wise no need to use ''. 
+             
+             
+      
+
+
+    
