@@ -55,11 +55,11 @@ jobs:
         with: 
           server_address: smtp.gmail.com
           server_port: 465
-          username: ${{ secure.EMAIL_USERNAME }}
-          password: ${{ secure.EMAIL_PASSWORD }}        
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}        
           subject: Phoenix-Inwarranty-Flow-Collection test execution notification 
           to: mnigam1012@gmail.com
-          from: ${{ secure.EMAIL_USERNAME }}
+          from: ${{ secrets.EMAIL_USERNAME }}
           body: |
             Hi, 
             phoenix inwarranty flow has been executed. the report has been published and the url is:
