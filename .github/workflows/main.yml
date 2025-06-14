@@ -49,6 +49,22 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }} #this will 
           publish_dir: newman/
 
+      - name : Send Email Notification
+        if: always()
+        uses: dawidd6/action-send-mail@v5
+        with: 
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secure.EMAIL_USERNAME }}
+          password: ${{ secure.EMAIL_PASSWORD }}        
+          subject: Phoenix-Inwarranty-Flow-Collection test execution notification 
+          to: mnigam1012@gmail.com
+          from: ${{ secure.EMAIL_USERNAME }}
+          body: |
+            Hi, 
+            phoenix inwarranty flow has been executed. the report has been published and the url is:
+            https://mnigam1012.github.io/Phoenix-Inwarranty-Flow-Collection/
+          
 
 
 
