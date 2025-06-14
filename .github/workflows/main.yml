@@ -35,8 +35,29 @@ jobs:
           -r cli,htmlextra
 
       - name : Newman Report   
-        if: always() #ensure the archive section is excuted irrespactive whater the previous step has passed or not!
+        if: always() #ensure the archive section is excuted irrespactive whather the previous step has passed or not!
         uses: actions/upload-artifact@v4.6.2
         with: 
           name: Newman Report
           path : newman/*.html
+
+      - name : Creating githum page branch
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} #this will 
+          publish_dir: newman/
+
+
+
+
+
+
+
+
+
+
+
+        
+        
+        
