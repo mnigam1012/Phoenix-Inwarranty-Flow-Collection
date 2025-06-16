@@ -5,9 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:  # This line allows manual workflow triggering
   schedule:
-    - cron: '30 02 * * *'    # 8:00 am IST
+    #- cron: '30 02 * * *'    # 8:00 am IST
     - cron: '00 14 * * *'    # Daily run
-    - cron: '00 06 * * 1-5'  # Monday to Friday
+    #- cron: '00 06 * * 1-5'  # Monday to Friday
 
 jobs:
   run-postman-test:
