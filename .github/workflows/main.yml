@@ -5,9 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:  # This line allows manual workflow triggering
   schedule:
-    #- cron: '30 02 * * *'    # 8:00 am IST
+    - cron: '30 02 * * *'    # 8:00 am IST
     - cron: '00 14 * * *'    # Daily run
-    #- cron: '00 06 * * 1-5'  # Monday to Friday
+    - cron: '00 06 * * 1-5'  # Monday to Friday
 
 jobs:
   run-postman-test:
@@ -29,52 +29,38 @@ jobs:
 
       - name: Run the Postman collection with newman
         run: |
-          newman run 'Inwarranty-flow Collection by jatin.postman_collection.json' \
-          -e QA.postman_environment.json \
-          -d testData.csv \
-          -r cli,htmlextra \
-          --reporter-htmlextra-export ./newman/index.html  
+          newman run "Inwarranty-flow Collection by jatin.postman_collection.json" \
+            -e QA.postman_environment.json \
+            -d testData.csv \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export newman/index.html
 
-      - name : Newman Report   
-        if: always() #ensure the archive section is excuted irrespactive whather the previous step has passed or not!
-        uses: actions/upload-artifact@v4.6.2
-        with: 
-          name: Newman Report
-          path : newman/*.html
-
-      - name : Creating githum page branch
+      - name: Upload Newman Report
         if: always()
-        uses: peaceiris/actions-gh-pages@v4.0.0
+        uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} #this will 
-          publish_dir: newman/
+          name: newman-report
+          path: newman/index.html
 
-      - name : Send Email Notification
+      - name: Create GitHub Pages Branch
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: newman
+
+      - name: Send Email Notification
         if: always()
         uses: dawidd6/action-send-mail@v5
-        with: 
+        with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}        
+          password: ${{ secrets.EMAIL_PASSWORD }}
           subject: Phoenix-Inwarranty-Flow-Collection test execution notification 
           to: mnigam1012@gmail.com
           from: ${{ secrets.EMAIL_USERNAME }}
           body: |
             Hi, 
-            phoenix in-warranty flow has been executed. the report has been published and the url is:
+            Phoenix Inwarranty Flow collection has been executed. The report has been published at:
             https://mnigam1012.github.io/Phoenix-Inwarranty-Flow-Collection/
-          
-
-
-
-
-
-
-
-
-
-
-        
-        
-        
